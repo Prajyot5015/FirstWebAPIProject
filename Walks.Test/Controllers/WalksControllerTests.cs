@@ -134,5 +134,30 @@ namespace FirstWebAPIProject.Tests.Controllers
             okResult.Value.Should().BeOfType<WalkDTO>();
             ((WalkDTO)okResult.Value).Name.Should().Be("Updated Walk");
         }
+
+        // Test for DeleteWalk (Walk Exists)
+        [Fact]
+        public async Task DeleteWalk_ShouldReturnOk_WhenWalkExists()
+        {
+            // Arrange
+            var walk = new Walk { Id = Guid.NewGuid(), Name = "Lake Walk" };
+            var walkDto = new WalkDTO { Id = walk.Id, Name = "Lake Walk" };
+
+            _walksRepositoryMock.Setup(repo => repo.DeleteWalkAsync(It.IsAny<Guid>()))
+                .ReturnsAsync(walk);
+            _mapperMock.Setup(m => m.Map<WalkDTO>(walk)).Returns(walkDto);
+
+            // Act
+            var result = await _controller.DeleteWalk(walk.Id);
+
+            // Assert
+            result.Should().BeOfType<OkObjectResult>();
+            var okResult = result as OkObjectResult;
+            okResult.Value.Should().BeOfType<WalkDTO>();
+            ((WalkDTO)okResult.Value).Name.Should().Be("Lake Walk");
+        }
+
+
+
     }
 }
