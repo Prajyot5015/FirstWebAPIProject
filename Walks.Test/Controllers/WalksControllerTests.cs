@@ -7,7 +7,6 @@ using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 
-
 namespace FirstWebAPIProject.Tests.Controllers
 {
     public class WalksControllerTests
@@ -110,6 +109,30 @@ namespace FirstWebAPIProject.Tests.Controllers
             var okResult = result as OkObjectResult;
             okResult.Value.Should().BeOfType<WalkDTO>();
             ((WalkDTO)okResult.Value).Name.Should().Be("River Walk");
+        }
+
+        // Test for UpdateWalk
+        [Fact]
+        public async Task UpdateWalk_ShouldReturnOk_WhenWalkExists()
+        {
+            // Arrange
+            var updateWalkDto = new UpdateWalkDTO { Name = "Updated Walk" };
+            var walkDomainModel = new Walk { Id = Guid.NewGuid(), Name = "Updated Walk" };
+            var walkDto = new WalkDTO { Id = walkDomainModel.Id, Name = "Updated Walk" };
+
+            _mapperMock.Setup(m => m.Map<Walk>(updateWalkDto)).Returns(walkDomainModel);
+            _walksRepositoryMock.Setup(repo => repo.UpdateWalkAsync(It.IsAny<Guid>(), It.IsAny<Walk>()))
+                .ReturnsAsync(walkDomainModel);
+            _mapperMock.Setup(m => m.Map<WalkDTO>(walkDomainModel)).Returns(walkDto);
+
+            // Act
+            var result = await _controller.UpdateWalk(Guid.NewGuid(), updateWalkDto);
+
+            // Assert
+            result.Should().BeOfType<OkObjectResult>();
+            var okResult = result as OkObjectResult;
+            okResult.Value.Should().BeOfType<WalkDTO>();
+            ((WalkDTO)okResult.Value).Name.Should().Be("Updated Walk");
         }
     }
 }
