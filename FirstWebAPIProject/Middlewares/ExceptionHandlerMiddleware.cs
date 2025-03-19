@@ -4,8 +4,8 @@ namespace FirstWebAPIProject.Middlewares
 {
     public class ExceptionHandlerMiddleware
     {
-        private readonly ILogger<ExceptionHandlerMiddleware> logger;
-        private readonly RequestDelegate next;
+        private readonly ILogger<ExceptionHandlerMiddleware> logger; 
+        private readonly RequestDelegate next; 
 
         public ExceptionHandlerMiddleware(ILogger<ExceptionHandlerMiddleware> logger, RequestDelegate next)
         {
@@ -17,7 +17,7 @@ namespace FirstWebAPIProject.Middlewares
         {
             try
             {
-                await next(httpContext);
+                await next(httpContext); // Call the next middleware in the pipeline 
             }
             catch (Exception ex)
             {

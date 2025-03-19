@@ -5,6 +5,7 @@
 *.vbproj.user
 *.csproj.user
 .vs/
+*.vs/
 
 # Ignore build output
 bin/

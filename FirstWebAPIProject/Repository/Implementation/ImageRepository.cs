@@ -6,19 +6,19 @@ namespace FirstWebAPIProject.Repository.Implementation
 {
     public class ImageRepository : IImageRepository
     {
-        private readonly IWebHostEnvironment webHostEnvironment;
-        private readonly IHttpContextAccessor httpContextAccessor;
+        private readonly IWebHostEnvironment webHostEnvironment; // To get the root path of the project
+        private readonly IHttpContextAccessor httpContextAccessor; // To get the current request URL
         private readonly AppDbContext appDbContext;
 
         public ImageRepository(IWebHostEnvironment webHostEnvironment, IHttpContextAccessor httpContextAccessor, AppDbContext appDbContext)
         {
-            this.webHostEnvironment = webHostEnvironment;
+            this.webHostEnvironment = webHostEnvironment; 
             this.httpContextAccessor = httpContextAccessor;
             this.appDbContext = appDbContext;
         }
         public async Task<Image> Upload(Image image)
         {
-            var fileNameWithExtension = image.FileName + image.FileExtension;
+            var fileNameWithExtension = image.FileName + image.FileExtension; 
 
             var localFilePath = Path.Combine(webHostEnvironment.ContentRootPath, "Images", fileNameWithExtension);
 
