@@ -157,7 +157,20 @@ namespace FirstWebAPIProject.Tests.Controllers
             ((WalkDTO)okResult.Value).Name.Should().Be("Lake Walk");
         }
 
+        // Test for DeleteWalk (Walk Not Found)
+        [Fact]
+        public async Task DeleteWalk_ShouldReturnNotFound_WhenWalkDoesNotExist()
+        {
+            // Arrange
+            _walksRepositoryMock.Setup(repo => repo.DeleteWalkAsync(It.IsAny<Guid>()))
+                .ReturnsAsync((Walk)null);
 
+            // Act
+            var result = await _controller.DeleteWalk(Guid.NewGuid());
+
+            // Assert
+            result.Should().BeOfType<NotFoundResult>();
+        }
 
     }
 }
